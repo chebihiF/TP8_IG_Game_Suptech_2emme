@@ -10,14 +10,22 @@ import java.util.Random;
 
 public class Programme {
 
-    private static JLabel nbr1,nbr2,op;
+    private static JLabel nbr1,nbr2,op,score_lbl;
     private static JButton res1, res2, res3;
+    private static int total = 0 ;
+    private static JFrame frame ;
 
 
     public static void main(String[] args) {
 
         // JFrame props
-        JFrame frame = new JFrame();
+        frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                initGame();
+            }
+        });
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setSize(500, 400);
@@ -33,11 +41,11 @@ public class Programme {
         frame.getContentPane().add(title, BorderLayout.NORTH);
 
         //JLabel Score
-        JLabel score = new JLabel("Score : 0");
-        score.setFont(new Font("Time new roman", 0, 20));
-        score.setHorizontalAlignment(JLabel.RIGHT);
-        score.setBorder(new EmptyBorder(0, 0, 10, 30));
-        frame.getContentPane().add(score, BorderLayout.SOUTH);
+        score_lbl = new JLabel("Score : "+total);
+        score_lbl.setFont(new Font("Time new roman", 0, 20));
+        score_lbl.setHorizontalAlignment(JLabel.RIGHT);
+        score_lbl.setBorder(new EmptyBorder(0, 0, 10, 30));
+        frame.getContentPane().add(score_lbl, BorderLayout.SOUTH);
 
         JPanel centerPanel = new JPanel();
         GridLayout gridLayout = new GridLayout(2, 3);
@@ -79,36 +87,7 @@ public class Programme {
                 eventClick(e);
             }
         });
-
-
         frame.getContentPane().add(centerPanel, BorderLayout.CENTER);
-
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-                Random random = new Random();
-                int n1 = random.nextInt(100) ;
-                int n2 = random.nextInt(100) ;
-
-                int pos = random.nextInt(3); // 0,1,2
-                nbr1.setText(n1+"");
-                nbr2.setText(n2+"");
-
-                if(pos == 0){
-                    res1.setText((n1+n2)+"");
-                    res2.setText(random.nextInt(200)+"");
-                    res3.setText(random.nextInt(200)+"");
-                }else if(pos == 1){
-                    res2.setText((n1+n2)+"");
-                    res1.setText(random.nextInt(200)+"");
-                    res3.setText(random.nextInt(200)+"");
-                }else {
-                    res3.setText((n1+n2)+"");
-                    res2.setText(random.nextInt(200)+"");
-                    res1.setText(random.nextInt(200)+"");
-                }
-            }
-        });
     }
 
     public static void eventClick(MouseEvent e){
@@ -117,7 +96,41 @@ public class Programme {
         int nb1 = Integer.parseInt(nbr1.getText());
         int nb2 = Integer.parseInt(nbr2.getText());
         if(nb1+nb2==res){
+            total++;
+            score_lbl.setText("Score : "+total);
+            score_lbl.setForeground(new Color(4,115,35));
+            score_lbl.setFont(new Font("Time new roman", Font.BOLD, 20));
+        }else{
+            total--;
+            score_lbl.setText("Score : "+total);
+            score_lbl.setForeground(new Color(208,0,0));
+            score_lbl.setFont(new Font("Time new roman", Font.BOLD, 20));
+        }
+        JOptionPane.showMessageDialog(frame,"Next","Info",JOptionPane.INFORMATION_MESSAGE);
+        initGame();
+    }
 
+    public static void initGame(){
+        Random random = new Random();
+        int n1 = random.nextInt(100) ;
+        int n2 = random.nextInt(100) ;
+
+        int pos = random.nextInt(3); // 0,1,2
+        nbr1.setText(n1+"");
+        nbr2.setText(n2+"");
+
+        if(pos == 0){
+            res1.setText((n1+n2)+"");
+            res2.setText(random.nextInt(200)+"");
+            res3.setText(random.nextInt(200)+"");
+        }else if(pos == 1){
+            res2.setText((n1+n2)+"");
+            res1.setText(random.nextInt(200)+"");
+            res3.setText(random.nextInt(200)+"");
+        }else {
+            res3.setText((n1+n2)+"");
+            res2.setText(random.nextInt(200)+"");
+            res1.setText(random.nextInt(200)+"");
         }
     }
 }
